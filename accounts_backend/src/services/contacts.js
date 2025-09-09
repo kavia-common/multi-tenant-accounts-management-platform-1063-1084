@@ -66,7 +66,7 @@ async function createContact(tenantId, user, payload) {
     const sql =
       'INSERT INTO contacts ' +
       '(tenant_id, name, email, phone, company, address, custom_fields, created_at, updated_at, dedupe_key) ' +
-      "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), SHA2(CONCAT(?, '|', IFNULL(?,''), '|', IFNULL(?,'')), 256))";
+      'VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), SHA2(CONCAT(?, \'|\', IFNULL(?,\'\'), \'|\', IFNULL(?,\'\')), 256))';
     const custom = payload.custom_fields ? JSON.stringify(payload.custom_fields) : null;
     const params = [
       tenantId,
@@ -256,7 +256,7 @@ async function updateContact(tenantId, user, id, payload) {
     const sql =
       'UPDATE contacts SET ' +
       fields.join(', ') + ', ' +
-      "dedupe_key = SHA2(CONCAT(IFNULL(name,''), '|', IFNULL(LOWER(email),''), '|', IFNULL(REPLACE(phone,' ',''),'')), 256) " +
+      'dedupe_key = SHA2(CONCAT(IFNULL(name,\'\'), \'|\', IFNULL(LOWER(email),\'\'), \'|\', IFNULL(REPLACE(phone,\' \',\'\'),\'\')), 256) ' +
       'WHERE id = ? AND ' + tWhere();
     params.push(id, tenantId);
     await conn.execute(sql, params);
@@ -598,7 +598,7 @@ async function bulkImport(tenantId, user, contacts = []) {
       } else {
         await conn.execute(
           'INSERT INTO contacts (tenant_id, name, email, phone, company, address, custom_fields, created_at, updated_at, dedupe_key) ' +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), SHA2(CONCAT(?, '|', IFNULL(?,''), '|', IFNULL(?,'')), 256))",
+            'VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW(), SHA2(CONCAT(?, \'|\', IFNULL(?,\'\'), \'|\', IFNULL(?,\'\')), 256))',
           [
             tenantId,
             c.name || null,
