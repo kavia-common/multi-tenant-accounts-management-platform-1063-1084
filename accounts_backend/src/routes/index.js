@@ -1,5 +1,6 @@
 const express = require('express');
 const healthController = require('../controllers/health');
+const contactsRoutes = require('./contacts');
 
 const router = express.Router();
 // Health endpoint
@@ -31,5 +32,8 @@ const router = express.Router();
  *                   example: development
  */
 router.get('/', healthController.check.bind(healthController));
+
+// Mount new contact management API routes under /api/contacts
+router.use('/api/contacts', contactsRoutes);
 
 module.exports = router;
