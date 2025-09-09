@@ -2,6 +2,7 @@ const express = require('express');
 const healthController = require('../controllers/health');
 const contactsRoutes = require('./contacts');
 const pipelineRoutes = require('./pipeline');
+const accountingRoutes = require('./accounting');
 
 const router = express.Router();
 // Health endpoint
@@ -39,5 +40,8 @@ router.use('/api/contacts', contactsRoutes);
 
 // Mount pipeline routes
 router.use('/api/pipeline', pipelineRoutes);
+
+// Mount accounting routes
+router.use('/api/accounting', accountingRoutes);
 
 module.exports = router;
