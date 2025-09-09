@@ -1,0 +1,4 @@
+{
+    "command": "npm install",
+    "working_directory": "/home/kavia/workspace/code-generation/multi-tenant-accounts-management-platform-1063-1084/accounts_backend"
+}
