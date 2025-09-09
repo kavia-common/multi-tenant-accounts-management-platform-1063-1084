@@ -3,6 +3,10 @@ const express = require('express');
 const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
+const dotenv = require('dotenv');
+const { isTokenBlacklisted } = require('./services/authService');
+
+dotenv.config();
 
 // Initialize express app
 const app = express();
@@ -40,6 +44,22 @@ app.use('/docs', swaggerUi.serve, (req, res, next) => {
 
 // Parse JSON request body
 app.use(express.json());
+
+// Early middleware to reject blacklisted tokens if present
+app.use((req, res, next) => {
+  try {
+    const auth = req.headers['authorization'] || '';
+    if (auth.toLowerCase().startsWith('bearer ')) {
+      const token = auth.slice(7);
+      if (isTokenBlacklisted(token)) {
+        return res.status(401).json({ message: 'Token is revoked' });
+      }
+    }
+  } catch (e) {
+    // ignore and proceed
+  }
+  next();
+});
 
 // Mount routes
 app.use('/', routes);

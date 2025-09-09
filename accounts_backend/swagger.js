@@ -4,10 +4,26 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'My Express API',
+      title: 'Accounts Backend API',
       version: '1.0.0',
-      description: 'A simple Express API documented with Swagger',
-    }
+      description: 'Multi-tenant accounts management API with JWT authentication and RBAC',
+    },
+    tags: [
+      { name: 'Health', description: 'Service health' },
+      { name: 'Auth', description: 'Authentication and session management' },
+      { name: 'Users', description: 'User management within tenant' },
+      { name: 'Organizations', description: 'Organization management (admins)' },
+      { name: 'Dashboard', description: 'Role-based dashboard data' },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
   apis: ['./src/routes/*.js'], // Path to the API docs
 };
